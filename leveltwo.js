@@ -173,7 +173,7 @@ const initCanvas = (function() {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
       ctx.fillStyle = e.clr;
-      ctx.fillRect(e.x, (e.y += 1), e.w, e.h);
+      ctx.fillRect(e.x, (e.y += 0.5), e.w, e.h);
       //console.log(e);
       if (e.y >= cH) {
         clearInterval(animateInterval);
@@ -215,7 +215,7 @@ const initCanvas = (function() {
     crashDetect(p.x, p.y, p.w, p.h);
   }
 
-  let score = 0;
+  let score = 45;
 
   function hitDetect(m, mi) {
     for (var i = 0; i < enemies.length; i++) {
@@ -304,7 +304,7 @@ const initCanvas = (function() {
     Enemies();
   }
 
-  const animateInterval = setInterval(animate, 20);
+  const animateInterval = setInterval(animate, 30);
 
   document.addEventListener("keydown", function(event) {
     const keyNum = event.keyCode;
