@@ -3,7 +3,8 @@ const initCanvas = (function() {
   const cH = ctx.canvas.height;
   const cW = ctx.canvas.width;
 
-  //  Background stars
+  //  Background stars ------------------------------------------------------------------------------------------------
+
   const stars = [];
 
   function addStar() {
@@ -41,33 +42,13 @@ const initCanvas = (function() {
     }
   }
 
-  // Enemy objects and movement
+  // Enemy objects ------------------------------------------------------------------------------------------------------
+
   const colors = ["#134b06", "#7c8f00", "#5d002c", "#81625d"];
-
-  // const enemies = [];
-
-  // function addEnemies(qOne, qTwo) {
-  //   for (var a = 0; a < qOne; a++) {
-  //     const x = (a + 1) * (cW / qOne);
-  //     enemies.push({
-  //       x: x,
-  //       y: -10,
-  //       w: 30,
-  //       h: 15,
-  //       clr: colors[Math.floor(Math.random() * colors.length)]
-  //     });
-  //     const e = enemies[a];
-  //     ctx.fillStyle = e.clr;
-  //     ctx.fillRect(e.x, (e.y += 0.5), e.w, e.h);
-  //     if (e.y >= cH) {
-  //       lose();
-  //     }
-  //   }
-  // }
 
   const enemiesTemplate = [];
 
-  const enemiesLevelOne = enemiesTemplate.push(
+  enemiesTemplate.push(
     { x: 0.08, y: -10 },
     { x: 0.2, y: -10 },
     { x: 0.3, y: -10 },
@@ -89,7 +70,7 @@ const initCanvas = (function() {
       clr: colors[Math.floor(Math.random() * colors.length)]
     }));
   }
-  console.log(enemies);
+
   function Enemies() {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
@@ -101,15 +82,8 @@ const initCanvas = (function() {
     }
   }
 
-  // const enemiesTwo = [0.08, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9].map(value => ({
-  //   x: cW * value,
-  //   y: -10,
-  //   w: 30,
-  //   h: 15,
-  //   clr: colors[Math.floor(Math.random() * colors.length)]
-  // }));
+  // player object and render -----------------------------------------------------------------------------------------
 
-  // player object and render
   const playerOne = { x: cW * 0.5, y: cH - 40, w: 40, h: 20, dir: "" };
   function playerRender() {
     p = playerOne;
@@ -130,9 +104,25 @@ const initCanvas = (function() {
     crashDetect(p.x, p.y, p.w, p.h);
   }
 
-  // missile shot detection
+  // missile shot detection and projection ----------------------------------------------------------------------------
+
+  let missiles = [];
+  let shots = 0;
   let score = 0;
-  function hitDetect(m, mi) {
+
+  function Missile(level) {
+    for (var i = 0; i < missiles.length; i++) {
+      const m = missiles[i];
+      ctx.fillStyle = "#ff5a00";
+      ctx.fillRect(m.x, (m.y -= 8), m.w, m.h);
+      if (m.y < 0) {
+        missiles.splice(i, 1);
+      }
+      hitDetect(missiles[i], i, level);
+    }
+  }
+
+  function hitDetect(m, mi, level) {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
       const eT = enemiesTemplate[i];
@@ -150,12 +140,13 @@ const initCanvas = (function() {
         document.getElementById("score").innerHTML = "Score: " + score;
       }
       if (enemies.length === 0) {
-        win();
+        console.log(level);
+        win(level);
       }
     }
   }
 
-  // crash detection
+  // crash detection and explosion ---------------------------------------------------------------------------------------
 
   function crashDetect(x, y, w, h) {
     for (var i = 0; i < enemies.length; i++) {
@@ -224,107 +215,33 @@ const initCanvas = (function() {
     setInterval(explode, 5);
   }
 
-  //const explosionInterval = setInterval(explosion(x,y), 30);
-
-  // missile projection
-  let missiles = [];
-  let shots = 0;
-
-  function Missile() {
-    for (var i = 0; i < missiles.length; i++) {
-      const m = missiles[i];
-      ctx.fillStyle = "#ff5a00";
-      ctx.fillRect(m.x, (m.y -= 8), m.w, m.h);
-      if (m.y < 0) {
-        missiles.splice(i, 1);
-      }
-      hitDetect(missiles[i], i);
-    }
-  }
-
-  // lose and win functions
-
-  function lose() {
-    clearInterval(animateInterval);
-    ctx.fillStyle = "red";
-    ctx.font = "bold 60px Arial, sans serif";
-    ctx.fillText("You lose!", cW * 0.5 - 120, cH * 0.4, 400);
-    ctx.fillStyle = "blue";
-    ctx.font = "bold 30px Arial, sans serif";
-    ctx.fillText("Press enter to continue", cW * 0.5 - 200, cH * 0.6, 400);
-
-    document.addEventListener("keydown", function(event) {
-      const key = event.keyCode;
-      if (key === 13) {
-        window.open("index.html", "_self");
-      }
-    });
-  }
-
-  function win() {
-    clearInterval(animateInterval);
-    ctx.fillStyle = "blue";
-    ctx.font = "bold 40px Arial, sans serif";
-    ctx.fillText("On to the next level!", cW * 0.5 - 200, cH * 0.4, 400);
-    ctx.fillStyle = "blue";
-    ctx.font = "bold 30px Arial, sans serif";
-    ctx.fillText("Press enter to continue", cW * 0.5 - 200, cH * 0.6, 400);
-    missiles.splice(0, missiles.length);
-
-    document.addEventListener("keydown", function(event) {
-      const key = event.keyCode;
-      if (key === 13) {
-        // window.open("leveltwo.html", "_self");
-        const enemiesLevelTwo = enemiesTemplate.push(
-          { x: 0.08, y: -10 },
-          { x: 0.2, y: -10 },
-          { x: 0.3, y: -10 },
-          { x: 0.4, y: -10 },
-          { x: 0.5, y: -10 },
-          { x: 0.6, y: -10 },
-          { x: 0.7, y: -10 },
-          { x: 0.8, y: -10 },
-          { x: 0.9, y: -10 },
-          { x: 0.08, y: -40 },
-          { x: 0.2, y: -40 },
-          { x: 0.3, y: -40 },
-          { x: 0.4, y: -40 },
-          { x: 0.5, y: -40 },
-          { x: 0.6, y: -40 },
-          { x: 0.7, y: -40 },
-          { x: 0.8, y: -40 },
-          { x: 0.9, y: -40 }
-        );
-        return enemiesLevelTwo, animateLevelTwo(), createEnemies();
-      }
-    });
-  }
-
-  // animation
-  function animate() {
+  // animation functions -----------------------------------------------------------------------------------------------
+  function animate(colour, level) {
     ctx.clearRect(0, 0, cW, cH);
-    spaceFly("rgba(255,255,255,0.75");
+    spaceFly(colour);
     playerRender();
-    Missile();
+    Missile(level);
     Enemies();
-    //addEnemies(10, 11);
   }
 
-  function animateLevelTwo() {
-    console.log("function called!");
-    function levelTwoGO() {
-      ctx.clearRect(0, 0, cW, cH);
-      spaceFly("rgba(246, 71, 71, 0.75)");
-      playerRender();
-      Missile();
-      Enemies();
-    }
-    setInterval(levelTwoGO, 30);
-  }
+  let starColor = "rgba(255,255,255,0.75";
+  let levelDeterminer = "one";
 
-  const animateInterval = setInterval(animate, 30);
+  const animateInit = setInterval(function() {
+    animate(starColor, levelDeterminer);
+  }, 30);
 
-  // Movement controls
+  let animateInitTwo = "";
+  let animateInitThree = "";
+  let animateInitFour = "";
+  let animateInitFive = "";
+  let animateInitSix = "";
+  let animateInitSeven = "";
+  let animateInitEight = "";
+  let animateInitNine = "";
+  let animateInitTen = "";
+
+  // Movement controls ------------------------------------------------------------------------------------------------
   document.addEventListener("keydown", function(event) {
     const keyNum = event.keyCode;
 
@@ -361,8 +278,456 @@ const initCanvas = (function() {
       playerOne.dir = "";
     }
   });
+
   window.addEventListener("load", createEnemies());
+
+  // lose and win functions -------------------------------------------------------------------------------------------
+
+  function lose() {
+    clearInterval(animateInit);
+    ctx.fillStyle = "red";
+    ctx.font = "bold 60px Arial, sans serif";
+    ctx.fillText("You lose!", cW * 0.5 - 120, cH * 0.4, 400);
+    ctx.fillStyle = "blue";
+    ctx.font = "bold 30px Arial, sans serif";
+    ctx.fillText("Press enter to continue", cW * 0.5 - 200, cH * 0.6, 400);
+
+    document.addEventListener("keydown", function(event) {
+      const key = event.keyCode;
+      if (key === 13) {
+        window.open("index.html", "_self");
+      }
+    });
+  }
+
+  function win(level) {
+    ctx.font = "bold 40px Arial, sans serif";
+    ctx.fillStyle = "red";
+    ctx.fillText(`Level ${level} complete!`, cW * 0.5 - 200, cH * 0.4, 400);
+    ctx.fillStyle = "blue";
+    ctx.font = "bold 30px Arial, sans serif";
+    ctx.fillText("Press enter to continue", cW * 0.5 - 200, cH * 0.6, 400);
+    missiles.splice(0, missiles.length);
+
+    // level Two initialisation --------------------------------------------------------------------------------------
+
+    if (level === "one") {
+      clearInterval(animateInit);
+      levelDeterminer = "two";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "two") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 }
+          );
+          animateInitTwo = setInterval(function() {
+            animate(starColor, levelDeterminer);
+            console.log("Level Two running");
+          }, 30);
+          console.log(levelDeterminer);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Three initialisation ---------------------------------------------------------------------------------------
+
+    if (level === "two") {
+      clearInterval(animateInitTwo);
+      levelDeterminer = "three";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "three") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitThree = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Four initialisation ----------------------------------------------------------------------------------------
+    if (level === "three") {
+      clearInterval(animateInitThree);
+      levelDeterminer = "four";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "four") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitFour = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Five initialisation ----------------------------------------------------------------------------------------
+
+    if (level === "four") {
+      clearInterval(animateInitFour);
+      levelDeterminer = "five";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "five") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitFive = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Six initialisation ----------------------------------------------------------------------------------------
+
+    if (level === "five") {
+      clearInterval(animateInitFive);
+      levelDeterminer = "six";
+      starColor = "rgba(207, 0, 15, 0.75)";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "six") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitSix = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Seven initialisation ---------------------------------------------------------------------------------------
+
+    if (level === "six") {
+      clearInterval(animateInitSix);
+      levelDeterminer = "seven";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "seven") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitSeven = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Eight initialisation ----------------------------------------------------------------------------------------
+
+    if (level === "seven") {
+      clearInterval(animateInitSeven);
+      levelDeterminer = "eight";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "eight") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitEight = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Nine initialisation -----------------------------------------------------------------------------------------
+
+    if (level === "eight") {
+      clearInterval(animateInitEight);
+      levelDeterminer = "nine";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "nine") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitNine = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // level Ten initialisation -----------------------------------------------------------------------------------------
+
+    if (level === "nine") {
+      clearInterval(animateInitNine);
+      levelDeterminer = "ten";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "ten") {
+          enemiesTemplate.push(
+            { x: 0.08, y: -10 },
+            { x: 0.2, y: -10 },
+            { x: 0.3, y: -10 },
+            { x: 0.4, y: -10 },
+            { x: 0.5, y: -10 },
+            { x: 0.6, y: -10 },
+            { x: 0.7, y: -10 },
+            { x: 0.8, y: -10 },
+            { x: 0.9, y: -10 },
+            { x: 0.08, y: -40 },
+            { x: 0.2, y: -40 },
+            { x: 0.3, y: -40 },
+            { x: 0.4, y: -40 },
+            { x: 0.5, y: -40 },
+            { x: 0.6, y: -40 },
+            { x: 0.7, y: -40 },
+            { x: 0.8, y: -40 },
+            { x: 0.9, y: -40 },
+            { x: 0.08, y: -70 },
+            { x: 0.2, y: -70 },
+            { x: 0.3, y: -70 },
+            { x: 0.4, y: -70 },
+            { x: 0.5, y: -70 },
+            { x: 0.6, y: -70 },
+            { x: 0.7, y: -70 },
+            { x: 0.8, y: -70 },
+            { x: 0.9, y: -70 }
+          );
+          animateInitTen = setInterval(function() {
+            animate(starColor, levelDeterminer);
+          }, 30);
+          createEnemies();
+        }
+      });
+    }
+
+    // Game end ------------------------------------------------------------------------------------------------------
+
+    if (level === "Ten") {
+      clearInterval(animateInitTen);
+      levelDeterminer = "win";
+      document.addEventListener("keydown", function(event) {
+        const key = event.keyCode;
+        if (key === 13 && levelDeterminer === "win") {
+          ctx.clearRect(0, 0, cW, cH);
+          ctx.fillText(
+            "You are victorious! Congratulations!",
+            cW * 0.5 - 200,
+            cH * 0.4,
+            400
+          );
+        }
+      });
+    }
+  }
+
   return {
-    animateInterval
+    animateInit
   };
 })();
