@@ -71,13 +71,13 @@ const initCanvas = (function() {
     }));
   }
 
-  function Enemies() {
+  function Enemies(level) {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
       ctx.fillStyle = e.clr;
       ctx.fillRect(e.x, (e.y += 0.5), e.w, e.h);
       if (e.y >= cH) {
-        lose();
+        lose(level);
       }
     }
   }
@@ -85,7 +85,7 @@ const initCanvas = (function() {
   // player object and render -----------------------------------------------------------------------------------------
 
   const playerOne = { x: cW * 0.5, y: cH - 40, w: 40, h: 20, dir: "" };
-  function playerRender() {
+  function playerRender(level) {
     p = playerOne;
     ctx.fillStyle = "#3e6f9d";
     ctx.fillRect(p.x, p.y, p.w, p.h);
@@ -101,7 +101,7 @@ const initCanvas = (function() {
     if (p.dir === "down" && p.y < cH - 10) {
       p.y += 5;
     }
-    crashDetect(p.x, p.y, p.w, p.h);
+    crashDetect(p.x, p.y, p.w, p.h, level);
   }
 
   // missile shot detection and projection ----------------------------------------------------------------------------
@@ -132,7 +132,6 @@ const initCanvas = (function() {
         m.y + m.h >= e.y &&
         m.y < e.y + e.h
       ) {
-        console.log("hello");
         missiles.splice(mi, 1);
         enemies.splice(i, 1);
         enemiesTemplate.splice(i, 1);
@@ -140,7 +139,6 @@ const initCanvas = (function() {
         document.getElementById("score").innerHTML = "Score: " + score;
       }
       if (enemies.length === 0) {
-        console.log(level);
         win(level);
       }
     }
@@ -148,7 +146,7 @@ const initCanvas = (function() {
 
   // crash detection and explosion ---------------------------------------------------------------------------------------
 
-  function crashDetect(x, y, w, h) {
+  function crashDetect(x, y, w, h, level) {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
       if (
@@ -158,7 +156,7 @@ const initCanvas = (function() {
         y + 3 < e.y + e.h
       ) {
         explosion(x + w * 0.5, y + h * 0.5);
-        lose();
+        lose(level);
       }
     }
   }
@@ -219,9 +217,9 @@ const initCanvas = (function() {
   function animate(colour, level) {
     ctx.clearRect(0, 0, cW, cH);
     spaceFly(colour);
-    playerRender();
+    playerRender(level);
     Missile(level);
-    Enemies();
+    Enemies(level);
   }
 
   let starColor = "rgba(255,255,255,0.75";
@@ -283,8 +281,37 @@ const initCanvas = (function() {
 
   // lose and win functions -------------------------------------------------------------------------------------------
 
-  function lose() {
-    clearInterval(animateInit);
+  function lose(level) {
+    if (level === "one") {
+      clearInterval(animateInit);
+    }
+    if (level === "two") {
+      clearInterval(animateInitTwo);
+    }
+    if (level === "three") {
+      clearInterval(animateInitThree);
+    }
+    if (level === "four") {
+      clearInterval(animateInitFour);
+    }
+    if (level === "five") {
+      clearInterval(animateInitFive);
+    }
+    if (level === "six") {
+      clearInterval(animateInitSix);
+    }
+    if (level === "seven") {
+      clearInterval(animateInitSeven);
+    }
+    if (level === "eight") {
+      clearInterval(animateInitEight);
+    }
+    if (level === "nine") {
+      clearInterval(animateInitNine);
+    }
+    if (level === "ten") {
+      clearInterval(animateInitTen);
+    }
     ctx.fillStyle = "red";
     ctx.font = "bold 60px Arial, sans serif";
     ctx.fillText("You lose!", cW * 0.5 - 120, cH * 0.4, 400);
@@ -339,9 +366,7 @@ const initCanvas = (function() {
           );
           animateInitTwo = setInterval(function() {
             animate(starColor, levelDeterminer);
-            console.log("Level Two running");
           }, 30);
-          console.log(levelDeterminer);
           createEnemies();
         }
       });
@@ -382,7 +407,16 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 }
           );
           animateInitThree = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -426,7 +460,25 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 }
           );
           animateInitFour = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -471,7 +523,34 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 }
           );
           animateInitFive = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -517,11 +596,38 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 }
           );
           animateInitSix = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 30);
+          }, 25);
           createEnemies();
         }
       });
@@ -562,11 +668,47 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 },
+            { x: 0.08, y: -190 },
+            { x: 0.2, y: -190 },
+            { x: 0.3, y: -190 },
+            { x: 0.4, y: -190 },
+            { x: 0.5, y: -190 },
+            { x: 0.6, y: -190 },
+            { x: 0.7, y: -190 },
+            { x: 0.8, y: -190 },
+            { x: 0.9, y: -190 }
           );
           animateInitSeven = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 30);
+          }, 20);
           createEnemies();
         }
       });
@@ -607,11 +749,47 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 },
+            { x: 0.08, y: -190 },
+            { x: 0.2, y: -190 },
+            { x: 0.3, y: -190 },
+            { x: 0.4, y: -190 },
+            { x: 0.5, y: -190 },
+            { x: 0.6, y: -190 },
+            { x: 0.7, y: -190 },
+            { x: 0.8, y: -190 },
+            { x: 0.9, y: -190 }
           );
           animateInitEight = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 30);
+          }, 17);
           createEnemies();
         }
       });
@@ -652,11 +830,56 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -100 },
+            { x: 0.2, y: -100 },
+            { x: 0.3, y: -100 },
+            { x: 0.4, y: -100 },
+            { x: 0.5, y: -100 },
+            { x: 0.6, y: -100 },
+            { x: 0.7, y: -100 },
+            { x: 0.8, y: -100 },
+            { x: 0.9, y: -100 },
+            { x: 0.08, y: -130 },
+            { x: 0.2, y: -130 },
+            { x: 0.3, y: -130 },
+            { x: 0.4, y: -130 },
+            { x: 0.5, y: -130 },
+            { x: 0.6, y: -130 },
+            { x: 0.7, y: -130 },
+            { x: 0.8, y: -130 },
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 },
+            { x: 0.08, y: -190 },
+            { x: 0.2, y: -190 },
+            { x: 0.3, y: -190 },
+            { x: 0.4, y: -190 },
+            { x: 0.5, y: -190 },
+            { x: 0.6, y: -190 },
+            { x: 0.7, y: -190 },
+            { x: 0.8, y: -190 },
+            { x: 0.9, y: -190 },
+            { x: 0.08, y: -220 },
+            { x: 0.2, y: -220 },
+            { x: 0.3, y: -220 },
+            { x: 0.4, y: -220 },
+            { x: 0.5, y: -220 },
+            { x: 0.6, y: -220 },
+            { x: 0.7, y: -220 },
+            { x: 0.8, y: -220 },
+            { x: 0.9, y: -220 }
           );
           animateInitNine = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 30);
+          }, 15);
           createEnemies();
         }
       });
@@ -697,11 +920,65 @@ const initCanvas = (function() {
             { x: 0.6, y: -70 },
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
-            { x: 0.9, y: -70 }
+            { x: 0.9, y: -70 },
+            { x: 0.08, y: -11 },
+            { x: 0.2, y: -11 },
+            { x: 0.3, y: -11 },
+            { x: 0.4, y: -11 },
+            { x: 0.5, y: -11 },
+            { x: 0.6, y: -11 },
+            { x: 0.7, y: -11 },
+            { x: 0.8, y: -11 },
+            { x: 0.9, y: -11 },
+            { x: 0.08, y: -41 },
+            { x: 0.2, y: -41 },
+            { x: 0.3, y: -41 },
+            { x: 0.4, y: -41 },
+            { x: 0.5, y: -41 },
+            { x: 0.6, y: -41 },
+            { x: 0.7, y: -41 },
+            { x: 0.8, y: -41 },
+            { x: 0.9, y: -41 },
+            { x: 0.08, y: -71 },
+            { x: 0.2, y: -71 },
+            { x: 0.3, y: -71 },
+            { x: 0.4, y: -71 },
+            { x: 0.5, y: -71 },
+            { x: 0.6, y: -71 },
+            { x: 0.7, y: -71 },
+            { x: 0.8, y: -71 },
+            { x: 0.9, y: -71 },
+            { x: 0.08, y: -42 },
+            { x: 0.2, y: -42 },
+            { x: 0.3, y: -42 },
+            { x: 0.4, y: -42 },
+            { x: 0.5, y: -42 },
+            { x: 0.6, y: -42 },
+            { x: 0.7, y: -42 },
+            { x: 0.8, y: -42 },
+            { x: 0.9, y: -42 },
+            { x: 0.08, y: -72 },
+            { x: 0.2, y: -72 },
+            { x: 0.3, y: -72 },
+            { x: 0.4, y: -72 },
+            { x: 0.5, y: -72 },
+            { x: 0.6, y: -72 },
+            { x: 0.7, y: -72 },
+            { x: 0.8, y: -72 },
+            { x: 0.9, y: -72 },
+            { x: 0.08, y: -73 },
+            { x: 0.2, y: -73 },
+            { x: 0.3, y: -73 },
+            { x: 0.4, y: -73 },
+            { x: 0.5, y: -73 },
+            { x: 0.6, y: -73 },
+            { x: 0.7, y: -73 },
+            { x: 0.8, y: -73 },
+            { x: 0.9, y: -73 }
           );
           animateInitTen = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 30);
+          }, 17);
           createEnemies();
         }
       });
