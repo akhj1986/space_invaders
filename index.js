@@ -45,7 +45,7 @@ const initCanvas = (function() {
   // Enemy objects ------------------------------------------------------------------------------------------------------
 
   const colors = ["#134b06", "#7c8f00", "#5d002c", "#81625d"];
-
+  let speed = 0.3;
   const enemiesTemplate = [];
 
   enemiesTemplate.push(
@@ -75,7 +75,7 @@ const initCanvas = (function() {
     for (var i = 0; i < enemies.length; i++) {
       const e = enemies[i];
       ctx.fillStyle = e.clr;
-      ctx.fillRect(e.x, (e.y += 0.5), e.w, e.h);
+      ctx.fillRect(e.x, (e.y += speed), e.w, e.h);
       if (e.y >= cH) {
         lose(level);
       }
@@ -240,9 +240,27 @@ const initCanvas = (function() {
   let animateInitTen = "";
 
   // Movement controls ------------------------------------------------------------------------------------------------
+
+  document.addEventListener("keyup", function(event) {
+    let keyStop = event.keyCode;
+    if (keyStop !== 32) {
+      playerOne.dir = "";
+    }
+    if (keyStop === 32) {
+      missiles.push({
+        x: playerOne.x + playerOne.w * 0.5,
+        y: playerOne.y,
+        w: 3,
+        h: 7
+      });
+      shots = shots + 1;
+      document.getElementById("missiles").innerHTML =
+        "Total missiles fired: " + shots;
+    }
+  });
+
   document.addEventListener("keydown", function(event) {
     const keyNum = event.keyCode;
-
     if (keyNum === 37) {
       playerOne.dir = "left";
     }
@@ -256,24 +274,6 @@ const initCanvas = (function() {
     }
     if (keyNum === 40) {
       playerOne.dir = "down";
-    }
-    if (keyNum === 32) {
-      missiles.push({
-        x: playerOne.x + playerOne.w * 0.5,
-        y: playerOne.y,
-        w: 3,
-        h: 7
-      });
-      shots = shots + 1;
-      document.getElementById("missiles").innerHTML =
-        "Total missiles fired: " + shots;
-    }
-  });
-
-  document.addEventListener("keyup", function(event) {
-    let keyStop = event.keyCode;
-    if (keyStop !== 32) {
-      playerOne.dir = "";
     }
   });
 
@@ -341,6 +341,7 @@ const initCanvas = (function() {
     if (level === "one") {
       clearInterval(animateInit);
       levelDeterminer = "two";
+      speed += 0.1;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "two") {
@@ -377,6 +378,7 @@ const initCanvas = (function() {
     if (level === "two") {
       clearInterval(animateInitTwo);
       levelDeterminer = "three";
+      speed += 0.1;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "three") {
@@ -430,6 +432,7 @@ const initCanvas = (function() {
     if (level === "three") {
       clearInterval(animateInitThree);
       levelDeterminer = "four";
+      speed += 0.1;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "four") {
@@ -461,15 +464,6 @@ const initCanvas = (function() {
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
             { x: 0.9, y: -70 },
-            { x: 0.08, y: -100 },
-            { x: 0.2, y: -100 },
-            { x: 0.3, y: -100 },
-            { x: 0.4, y: -100 },
-            { x: 0.5, y: -100 },
-            { x: 0.6, y: -100 },
-            { x: 0.7, y: -100 },
-            { x: 0.8, y: -100 },
-            { x: 0.9, y: -100 },
             { x: 0.08, y: -130 },
             { x: 0.2, y: -130 },
             { x: 0.3, y: -130 },
@@ -478,7 +472,16 @@ const initCanvas = (function() {
             { x: 0.6, y: -130 },
             { x: 0.7, y: -130 },
             { x: 0.8, y: -130 },
-            { x: 0.9, y: -130 }
+            { x: 0.9, y: -130 },
+            { x: 0.08, y: -160 },
+            { x: 0.2, y: -160 },
+            { x: 0.3, y: -160 },
+            { x: 0.4, y: -160 },
+            { x: 0.5, y: -160 },
+            { x: 0.6, y: -160 },
+            { x: 0.7, y: -160 },
+            { x: 0.8, y: -160 },
+            { x: 0.9, y: -160 }
           );
           animateInitFour = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -493,6 +496,7 @@ const initCanvas = (function() {
     if (level === "four") {
       clearInterval(animateInitFour);
       levelDeterminer = "five";
+      speed += 0.1;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "five") {
@@ -524,15 +528,6 @@ const initCanvas = (function() {
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
             { x: 0.9, y: -70 },
-            { x: 0.08, y: -100 },
-            { x: 0.2, y: -100 },
-            { x: 0.3, y: -100 },
-            { x: 0.4, y: -100 },
-            { x: 0.5, y: -100 },
-            { x: 0.6, y: -100 },
-            { x: 0.7, y: -100 },
-            { x: 0.8, y: -100 },
-            { x: 0.9, y: -100 },
             { x: 0.08, y: -130 },
             { x: 0.2, y: -130 },
             { x: 0.3, y: -130 },
@@ -550,7 +545,16 @@ const initCanvas = (function() {
             { x: 0.6, y: -160 },
             { x: 0.7, y: -160 },
             { x: 0.8, y: -160 },
-            { x: 0.9, y: -160 }
+            { x: 0.9, y: -160 },
+            { x: 0.08, y: -190 },
+            { x: 0.2, y: -190 },
+            { x: 0.3, y: -190 },
+            { x: 0.4, y: -190 },
+            { x: 0.5, y: -190 },
+            { x: 0.6, y: -190 },
+            { x: 0.7, y: -190 },
+            { x: 0.8, y: -190 },
+            { x: 0.9, y: -190 }
           );
           animateInitFive = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -565,6 +569,7 @@ const initCanvas = (function() {
     if (level === "five") {
       clearInterval(animateInitFive);
       levelDeterminer = "six";
+      speed += 0.05;
       starColor = "rgba(207, 0, 15, 0.75)";
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
@@ -597,15 +602,6 @@ const initCanvas = (function() {
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
             { x: 0.9, y: -70 },
-            { x: 0.08, y: -100 },
-            { x: 0.2, y: -100 },
-            { x: 0.3, y: -100 },
-            { x: 0.4, y: -100 },
-            { x: 0.5, y: -100 },
-            { x: 0.6, y: -100 },
-            { x: 0.7, y: -100 },
-            { x: 0.8, y: -100 },
-            { x: 0.9, y: -100 },
             { x: 0.08, y: -130 },
             { x: 0.2, y: -130 },
             { x: 0.3, y: -130 },
@@ -623,7 +619,16 @@ const initCanvas = (function() {
             { x: 0.6, y: -160 },
             { x: 0.7, y: -160 },
             { x: 0.8, y: -160 },
-            { x: 0.9, y: -160 }
+            { x: 0.9, y: -160 },
+            { x: 0.08, y: -190 },
+            { x: 0.2, y: -190 },
+            { x: 0.3, y: -190 },
+            { x: 0.4, y: -190 },
+            { x: 0.5, y: -190 },
+            { x: 0.6, y: -190 },
+            { x: 0.7, y: -190 },
+            { x: 0.8, y: -190 },
+            { x: 0.9, y: -190 }
           );
           animateInitSix = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -638,6 +643,7 @@ const initCanvas = (function() {
     if (level === "six") {
       clearInterval(animateInitSix);
       levelDeterminer = "seven";
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "seven") {
@@ -669,15 +675,6 @@ const initCanvas = (function() {
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
             { x: 0.9, y: -70 },
-            { x: 0.08, y: -100 },
-            { x: 0.2, y: -100 },
-            { x: 0.3, y: -100 },
-            { x: 0.4, y: -100 },
-            { x: 0.5, y: -100 },
-            { x: 0.6, y: -100 },
-            { x: 0.7, y: -100 },
-            { x: 0.8, y: -100 },
-            { x: 0.9, y: -100 },
             { x: 0.08, y: -130 },
             { x: 0.2, y: -130 },
             { x: 0.3, y: -130 },
@@ -696,15 +693,24 @@ const initCanvas = (function() {
             { x: 0.7, y: -160 },
             { x: 0.8, y: -160 },
             { x: 0.9, y: -160 },
-            { x: 0.08, y: -190 },
-            { x: 0.2, y: -190 },
-            { x: 0.3, y: -190 },
-            { x: 0.4, y: -190 },
-            { x: 0.5, y: -190 },
-            { x: 0.6, y: -190 },
-            { x: 0.7, y: -190 },
-            { x: 0.8, y: -190 },
-            { x: 0.9, y: -190 }
+            { x: 0.08, y: -220 },
+            { x: 0.2, y: -220 },
+            { x: 0.3, y: -220 },
+            { x: 0.4, y: -220 },
+            { x: 0.5, y: -220 },
+            { x: 0.6, y: -220 },
+            { x: 0.7, y: -220 },
+            { x: 0.8, y: -220 },
+            { x: 0.9, y: -220 },
+            { x: 0.08, y: -250 },
+            { x: 0.2, y: -250 },
+            { x: 0.3, y: -250 },
+            { x: 0.4, y: -250 },
+            { x: 0.5, y: -250 },
+            { x: 0.6, y: -250 },
+            { x: 0.7, y: -250 },
+            { x: 0.8, y: -250 },
+            { x: 0.9, y: -250 }
           );
           animateInitSeven = setInterval(function() {
             animate(starColor, levelDeterminer);
@@ -719,6 +725,7 @@ const initCanvas = (function() {
     if (level === "seven") {
       clearInterval(animateInitSeven);
       levelDeterminer = "eight";
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "eight") {
@@ -800,6 +807,7 @@ const initCanvas = (function() {
     if (level === "eight") {
       clearInterval(animateInitEight);
       levelDeterminer = "nine";
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "nine") {
@@ -890,6 +898,7 @@ const initCanvas = (function() {
     if (level === "nine") {
       clearInterval(animateInitNine);
       levelDeterminer = "ten";
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "ten") {
@@ -921,33 +930,15 @@ const initCanvas = (function() {
             { x: 0.7, y: -70 },
             { x: 0.8, y: -70 },
             { x: 0.9, y: -70 },
-            { x: 0.08, y: -11 },
-            { x: 0.2, y: -11 },
-            { x: 0.3, y: -11 },
-            { x: 0.4, y: -11 },
-            { x: 0.5, y: -11 },
-            { x: 0.6, y: -11 },
-            { x: 0.7, y: -11 },
-            { x: 0.8, y: -11 },
-            { x: 0.9, y: -11 },
-            { x: 0.08, y: -41 },
-            { x: 0.2, y: -41 },
-            { x: 0.3, y: -41 },
-            { x: 0.4, y: -41 },
-            { x: 0.5, y: -41 },
-            { x: 0.6, y: -41 },
-            { x: 0.7, y: -41 },
-            { x: 0.8, y: -41 },
-            { x: 0.9, y: -41 },
-            { x: 0.08, y: -71 },
-            { x: 0.2, y: -71 },
-            { x: 0.3, y: -71 },
-            { x: 0.4, y: -71 },
-            { x: 0.5, y: -71 },
-            { x: 0.6, y: -71 },
-            { x: 0.7, y: -71 },
-            { x: 0.8, y: -71 },
-            { x: 0.9, y: -71 },
+            { x: 0.08, y: -12 },
+            { x: 0.2, y: -12 },
+            { x: 0.3, y: -12 },
+            { x: 0.4, y: -12 },
+            { x: 0.5, y: -12 },
+            { x: 0.6, y: -12 },
+            { x: 0.7, y: -12 },
+            { x: 0.8, y: -12 },
+            { x: 0.9, y: -12 },
             { x: 0.08, y: -42 },
             { x: 0.2, y: -42 },
             { x: 0.3, y: -42 },
@@ -966,6 +957,24 @@ const initCanvas = (function() {
             { x: 0.7, y: -72 },
             { x: 0.8, y: -72 },
             { x: 0.9, y: -72 },
+            { x: 0.08, y: -44 },
+            { x: 0.2, y: -44 },
+            { x: 0.3, y: -44 },
+            { x: 0.4, y: -44 },
+            { x: 0.5, y: -44 },
+            { x: 0.6, y: -44 },
+            { x: 0.7, y: -44 },
+            { x: 0.8, y: -44 },
+            { x: 0.9, y: -44 },
+            { x: 0.08, y: -74 },
+            { x: 0.2, y: -74 },
+            { x: 0.3, y: -74 },
+            { x: 0.4, y: -74 },
+            { x: 0.5, y: -74 },
+            { x: 0.6, y: -74 },
+            { x: 0.7, y: -74 },
+            { x: 0.8, y: -74 },
+            { x: 0.9, y: -74 },
             { x: 0.08, y: -73 },
             { x: 0.2, y: -73 },
             { x: 0.3, y: -73 },
