@@ -61,11 +61,12 @@ const initCanvas = (function() {
   );
 
   let enemies = [];
+
   function createEnemies() {
     enemies = enemiesTemplate.map(obj => ({
       x: cW * obj.x,
       y: obj.y,
-      w: 30,
+      w: 40,
       h: 15,
       clr: colors[Math.floor(Math.random() * colors.length)]
     }));
@@ -135,7 +136,7 @@ const initCanvas = (function() {
         missiles.splice(mi, 1);
         enemies.splice(i, 1);
         enemiesTemplate.splice(i, 1);
-        score += 5;
+        score += Math.round(10 - 0.025 * e.y);
         document.getElementById("score").innerHTML = "Score: " + score;
       }
       if (enemies.length === 0) {
@@ -314,10 +315,13 @@ const initCanvas = (function() {
     }
     ctx.fillStyle = "red";
     ctx.font = "bold 60px Arial, sans serif";
-    ctx.fillText("You lose!", cW * 0.5 - 120, cH * 0.4, 400);
+    ctx.fillText("You lose!", cW * 0.2, cH * 0.3, 400);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 40px Arial, sans serif";
+    ctx.fillText(`You scored ${score} points`, cW * 0.2, cH * 0.45);
     ctx.fillStyle = "blue";
     ctx.font = "bold 30px Arial, sans serif";
-    ctx.fillText("Press enter to continue", cW * 0.5 - 200, cH * 0.6, 400);
+    ctx.fillText("Press enter to continue", cW * 0.2, cH * 0.55, 400);
 
     document.addEventListener("keydown", function(event) {
       const key = event.keyCode;
@@ -341,7 +345,7 @@ const initCanvas = (function() {
     if (level === "one") {
       clearInterval(animateInit);
       levelDeterminer = "two";
-      speed += 0.1;
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "two") {
@@ -378,7 +382,7 @@ const initCanvas = (function() {
     if (level === "two") {
       clearInterval(animateInitTwo);
       levelDeterminer = "three";
-      speed += 0.1;
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "three") {
@@ -432,7 +436,7 @@ const initCanvas = (function() {
     if (level === "three") {
       clearInterval(animateInitThree);
       levelDeterminer = "four";
-      speed += 0.1;
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "four") {
@@ -496,7 +500,7 @@ const initCanvas = (function() {
     if (level === "four") {
       clearInterval(animateInitFour);
       levelDeterminer = "five";
-      speed += 0.1;
+      speed += 0.05;
       document.addEventListener("keydown", function(event) {
         const key = event.keyCode;
         if (key === 13 && levelDeterminer === "five") {
@@ -632,7 +636,7 @@ const initCanvas = (function() {
           );
           animateInitSix = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 25);
+          }, 30);
           createEnemies();
         }
       });
@@ -714,7 +718,7 @@ const initCanvas = (function() {
           );
           animateInitSeven = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 20);
+          }, 30);
           createEnemies();
         }
       });
@@ -796,7 +800,7 @@ const initCanvas = (function() {
           );
           animateInitEight = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 17);
+          }, 30);
           createEnemies();
         }
       });
@@ -887,7 +891,7 @@ const initCanvas = (function() {
           );
           animateInitNine = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 15);
+          }, 30);
           createEnemies();
         }
       });
@@ -987,7 +991,7 @@ const initCanvas = (function() {
           );
           animateInitTen = setInterval(function() {
             animate(starColor, levelDeterminer);
-          }, 17);
+          }, 30);
           createEnemies();
         }
       });

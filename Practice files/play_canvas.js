@@ -1,3 +1,15 @@
+const xhttp = new XMLHttpRequest();
+let enemies = "";
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    enemies = JSON.parse(xhttp.response);
+  }
+};
+
+xhttp.open("GET", "enemies.json", true);
+xhttp.send();
+console.log(enemies[1]);
+
 const initCanvas = (function() {
   const ctx = document.getElementById("my_canvas").getContext("2d");
   const cW = ctx.canvas.width;

@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/akhj1986/space_invaders/issues"
   },
-  "homepage": "https://github.com/akhj1986/space_invaders#readme"
+  "homepage": "https://github.com/akhj1986/space_invaders#readme",
+  "dependencies": {
+    "pg": "^7.7.1"
+  }
 }
